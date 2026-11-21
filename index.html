@@ -1,90 +1,30 @@
-# ead-ai-clipper
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EAD AI CLIPPER</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#090b12;color:white;font-family:Arial,sans-serif;padding:20px}
-header{display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:25px;font-weight:900;color:#8b7cff}
-.tag{background:#19182c;padding:8px 12px;border-radius:20px;color:#a99cff;font-size:12px}
-h1{font-size:32px;margin-top:45px}
-h1 span{color:#8b7cff}
-p{color:#999}
-.card{background:#141722;border:1px solid #292d3b;padding:20px;border-radius:18px;margin-top:25px}
-label{display:block;margin-bottom:12px;font-size:14px}
-input,select{width:100%;padding:15px;background:#090b12;border:1px solid #34394b;border-radius:10px;color:white;margin-bottom:18px;font-size:15px}
-button{width:100%;padding:16px;background:#7865ff;color:white;border:0;border-radius:10px;font-size:16px;font-weight:bold}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.feature{background:#141722;padding:18px;border-radius:13px;border:1px solid #292d3b}
-.feature b{display:block;margin-bottom:8px}
-.feature small{color:#999}
-#status{margin-top:15px;color:#b5aaff;font-size:14px}
-footer{text-align:center;color:#666;margin-top:40px;font-size:12px}
-</style>
-</head>
-<body>
-<header>
-<div class="logo">EAD AI CLIPPER</div>
-<div class="tag">AI STUDIO</div>
-</header>
-
-<h1>Turn Long Videos<br>Into <span>Viral Shorts.</span></h1>
-<p>Create vertical videos with captions and viral moments.</p>
-
-<div class="card">
-<label>YouTube Video Link</label>
-<input id="url" type="url" placeholder="Paste YouTube URL here">
-
-<label>Number of Shorts</label>
-<select id="clips">
-<option>2</option>
-<option selected>4</option>
-<option>6</option>
-<option>8</option>
-</select>
-
-<label>Caption Language</label>
-<select id="language">
-<option>Hinglish</option>
-<option>English</option>
-<option>Hindi</option>
-</select>
-
-<label>Video Style</label>
-<select id="style">
-<option>Viral Shorts</option>
-<option>Podcast</option>
-<option>Gaming</option>
-<option>Motivation</option>
-</select>
-
-<button onclick="analyze()">ANALYZE VIDEO</button>
-<div id="status"></div>
-</div>
-
-<div class="features">
-<div class="feature">🎬<b>AI Clipping</b><small>Find best moments</small></div>
-<div class="feature">💬<b>Auto Captions</b><small>Hinglish & English</small></div>
-<div class="feature">📱<b>9:16 Format</b><small>Vertical Shorts</small></div>
-<div class="feature">⚡<b>AI Titles</b><small>Viral title ideas</small></div>
-</div>
-
-<footer>EAD AI CLIPPER · Made for Creators</footer>
-
 <script>
-function analyze(){
-const url=document.getElementById('url').value.trim();
-const status=document.getElementById('status');
-if(!url || !/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(url)){
-status.textContent="Please enter a valid YouTube link.";
-return;
-}
-status.textContent="Frontend ready! Backend connection is the next step.";
+async function analyze(){
+  const url = document.getElementById('url').value.trim();
+  const status = document.getElementById('status');
+
+  if(!url || !/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i.test(url)){
+    status.textContent = "Please enter a valid YouTube link.";
+    return;
+  }
+
+  status.textContent = "Connecting to EAD AI Server...";
+
+  try {
+    const response = await fetch(
+      "https://ead-ai-clipper.onrender.com/health"
+    );
+
+    if(!response.ok) throw new Error("Server error");
+
+    const data = await response.json();
+
+    status.textContent =
+      data.status === "ok"
+      ? "EAD AI Server Connected! Video clipping system is next."
+      : "Server response received.";
+  } catch(error) {
+    status.textContent = "Server connection failed. Please try again.";
+  }
 }
 </script>
-</body>
-</html>
